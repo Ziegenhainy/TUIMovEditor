@@ -7,29 +7,35 @@ from TUITween import *
 from tuitime import *
 
 class TUIMov:
+    def render_frame(self):
+        for obj in self.objects:
+            obj.render(self.canvas)
+
+
+        next_frame = "\033[H"
+        for line in self.canvas:
+            for c in line:
+                next_frame += c
+            next_frame += "\n"
+        self.add_string(next_frame)
+        
+
     def render(self):
         self.actions.sort(key=lambda a: a.time)
         # TODO: sort the shit
 
         cur_time = TUITime()
-        frame_time = TUITime()
+        frame_time = TUITime()   
         for action in self.actions:
-            for obj in self.objects:
-                obj.render(self.canvas)
-
-            next_frame = "\033[H"
-            for line in self.canvas:
-                for c in line:
-                    next_frame += c
-                next_frame += "\n"
-            
             action.action_func(*action.action_args)
             
             frame_time = action.time-cur_time
             cur_time = action.time
             if frame_time:
-                self.add_string(next_frame)
+                self.render_frame()
                 self.add_pause(frame_time)
+        if not frame_time:
+            self.render_frame()
 
 
 
