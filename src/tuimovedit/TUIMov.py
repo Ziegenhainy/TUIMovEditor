@@ -30,7 +30,7 @@ class TUIMov:
         self.add_string(next_frame)
         
 
-    def render(self):
+    def render(self, clear_objects=True, clear_actions=True):
         self.render_pass += 1
         self.actions.sort(key=lambda a: a.time)
 
@@ -50,8 +50,10 @@ class TUIMov:
         if not frame_time:
             self.render_frame()
         print(" Done! :3")
-
-
+        if clear_objects:
+            self.remove_all_objects()
+        if clear_actions:
+            self.actions = []
 
     def add_string(self, new_str: str):
         self.file.write(bytes(new_str, encoding="UTF-8"))
@@ -62,6 +64,15 @@ class TUIMov:
 
     def add_object(self, new_obj: TUIObject):
         self.objects.append(new_obj)
+
+    def remove_object(self, current_obj):
+        self.objects.remove(current_obj)
+
+    def remove_all_objects(self):
+        self.objects = []
+        if self.background:
+            self.objects.append(self.background)
+        
 
     def add_action(self, new_act: TUIAction, move_cursor=False):
         new_act.time += self.cursor

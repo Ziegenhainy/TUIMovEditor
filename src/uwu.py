@@ -1,7 +1,7 @@
 from tuimovedit import *
 import random as rd
 
-mov = TUIMov(200,100, "uwu.tuimov")
+mov = TUIMov(200,100, "examples/uwu.tuimov")
 
 transparent_box=(
     "╔═╗",
@@ -16,9 +16,7 @@ for j in range(20):
             rd.randint(2,15),
             transparent_box)
         mov.add_object(box)
-        mov.add_tweens(box.move_tween(rd.randint(-100,100),rd.randint(-50,50), TUITime(3)))
+        mov.add_tweens(box.move_tween(rd.randint(-box.x,200-box.x),rd.randint(-box.y,100-box.y), TUITime(3), sin_ease))
         
 
     mov.render()
-    mov.objects = [BackgroundObject()]
-    mov.actions = []
