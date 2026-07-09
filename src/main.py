@@ -8,7 +8,7 @@ def main():
     text2 = TextObject(60,10, "Hello, Text!")
     text3 = TextObject(-5, 20, "im Stupid lol")
     
-    box1 = BoxObject(x=0, y=5, width=10, height=5)
+    box1 = BoxObject(x=3, y=3, width=10, height=1)
     mov.add_object(box1)
 
     text4 = TextObject(10, -20, "UwU")

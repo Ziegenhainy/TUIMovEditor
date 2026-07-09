@@ -5,6 +5,9 @@ from .utils import *
 
 class TUIMov:
     def render_frame(self):
+        self.frames_rendered += 1
+        if self.frames_rendered % 10 == 0 or self.num_actions_done == self.num_actions:
+            print(f"\rFrame: {self.frames_rendered:5d}, Action: {self.num_actions_done:5d}/{self.num_actions}, Pass: {self.render_pass}", end="")
         for obj in self.objects:
             obj.render(self.canvas)
 
@@ -18,12 +21,16 @@ class TUIMov:
         
 
     def render(self):
+        self.render_pass += 1
         self.actions.sort(key=lambda a: a.time)
         # TODO: sort the shit
 
         cur_time = TUITime()
-        frame_time = TUITime()   
+        frame_time = TUITime()
+        self.num_actions = len(self.actions)
+        self.num_actions_done = 0
         for action in self.actions:
+            self.num_actions_done += 1
             action.action_func(*action.action_args)
             
             frame_time = action.time-cur_time
@@ -33,6 +40,7 @@ class TUIMov:
                 self.add_pause(frame_time)
         if not frame_time:
             self.render_frame()
+        print(" Done! :3")
 
 
 
@@ -61,7 +69,7 @@ class TUIMov:
         if move_cursor:
             self.cursor += tween.time
 
-    def add_tweens(self, tweens: tuple[TUITween]):
+    def add_tweens(self, tweens: tuple[TUITween], move_cursor = False):
         for tween in tweens:
             self.add_tween(tween)
         if move_cursor:
@@ -77,6 +85,11 @@ class TUIMov:
         self.actions: list[TUIAction] = []
         self.background = None 
         self.cursor = TUITime()
+
+        self.render_pass = 0
+        self.frames_rendered = 0
+        self.num_actions = 0
+        self.num_actions_done = 0
 
         if add_background:
             self.background = BackgroundObject()
