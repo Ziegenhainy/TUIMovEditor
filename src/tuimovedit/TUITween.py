@@ -1,4 +1,4 @@
-from tuitime import *
+from .utils import *
 
 class TUITween:
     def __init__(self, end_val, time: TUITime, frame_handler, ease_func):

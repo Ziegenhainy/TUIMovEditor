@@ -1,4 +1,4 @@
-from TUIObject import TUIObject
+from .TUIObject import TUIObject
 
 class BackgroundObject(TUIObject):
     def render(self, canvas):

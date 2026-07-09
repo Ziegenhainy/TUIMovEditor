@@ -1,4 +1,4 @@
-from tuitime import *
+from .tuitime import *
 
 BILLION = 1_000_000_000
 

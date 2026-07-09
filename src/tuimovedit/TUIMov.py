@@ -1,10 +1,7 @@
-from utils import *
-from TUIObject import *
-from TextObject import *
-from TUIAction import *
-from BackgroundObject import *
-from TUITween import *
-from tuitime import *
+from .objects import *
+from .TUIAction import *
+from .TUITween import *
+from .utils import *
 
 class TUIMov:
     def render_frame(self):
@@ -49,18 +46,26 @@ class TUIMov:
     def add_object(self, new_obj: TUIObject):
         self.objects.append(new_obj)
 
-    def add_action(self, new_act: TUIAction):
+    def add_action(self, new_act: TUIAction, move_cursor=False):
+        new_act.time += self.cursor
         self.actions.append(new_act)
+        if move_cursor:
+            self.cursor = new_act.time
 
 
-    def add_tween(self, tween: TUITween, start_time: TUITime):
+    def add_tween(self, tween: TUITween, move_cursor = False):
         for step in range(tween.end_val):
-            next_action = TUIAction(tween.frame_handler, (step,), start_time+(tween.time*tween.ease_func(step/tween.end_val)))
+            next_time = tween.time*tween.ease_func(step/tween.end_val)
+            next_action = TUIAction(tween.frame_handler, (step,), next_time)
             self.add_action(next_action)
+        if move_cursor:
+            self.cursor += tween.time
 
-    def add_tweens(self, tweens: tuple[TUITween], start_time: TUITime):
+    def add_tweens(self, tweens: tuple[TUITween]):
         for tween in tweens:
-            self.add_tween(tween, start_time)
+            self.add_tween(tween)
+        if move_cursor:
+            self.cursor += tweens[0].time
 
     def __init__(self, width, height, filepath, add_background=True):
         self.filepath = filepath
@@ -71,6 +76,7 @@ class TUIMov:
         self.objects: list[TUIObject] = []
         self.actions: list[TUIAction] = []
         self.background = None 
+        self.cursor = TUITime()
 
         if add_background:
             self.background = BackgroundObject()

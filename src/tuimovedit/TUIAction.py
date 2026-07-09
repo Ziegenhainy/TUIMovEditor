@@ -1,4 +1,4 @@
-from tuitime import *
+from .utils.tuitime import *
 
 class TUIAction:
     def __init__(self, action_func, action_args: tuple=(), time: TUITime = TUITime()):
