@@ -1,0 +1,1 @@
+An editor for my own .TUIMOV files. Some Examples are provided but i will do documentation later lol
