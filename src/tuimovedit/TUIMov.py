@@ -4,18 +4,28 @@ from .TUITween import *
 from .utils import *
 
 class TUIMov:
-    def render_frame(self):
-        self.frames_rendered += 1
+    def current_frame_print(self):
         if self.frames_rendered % 10 == 0 or self.num_actions_done == self.num_actions:
             print(f"\rFrame: {self.frames_rendered:5d}, Action: {self.num_actions_done:5d}/{self.num_actions}, Pass: {self.render_pass}", end="")
+        
+
+    def render_frame(self):
+        self.frames_rendered += 1
+        self.current_frame_print()
         for obj in self.objects:
             obj.render(self.canvas)
 
 
         next_frame = "\033[H"
-        for line in self.canvas:
-            for c in line:
-                next_frame += c
+        for y, (line, last_line) in enumerate(zip(self.canvas, self.last_canvas)):
+            skip_chars = 0
+            for x, (c, last_c) in enumerate(zip(line, last_line)):
+                if c == last_c:
+                    skip_chars += 1
+                else:
+                    next_frame += (f"\033[{skip_chars}C{c}" if skip_chars else c)
+                    skip_chars = 0
+                self.last_canvas[y][x] = c
             next_frame += "\n"
         self.add_string(next_frame)
         
@@ -23,7 +33,6 @@ class TUIMov:
     def render(self):
         self.render_pass += 1
         self.actions.sort(key=lambda a: a.time)
-        # TODO: sort the shit
 
         cur_time = TUITime()
         frame_time = TUITime()
@@ -80,7 +89,8 @@ class TUIMov:
         self.file = open(filepath, "wb")
         self.width = width
         self.height = height
-        self.canvas: list[list[str]] = [[" " for _ in range(width)] for _ in range(height)]
+        self.canvas:      list[list[str]] = [[" " for _ in range(width)] for _ in range(height)]
+        self.last_canvas: list[list[str]] = [[" " for _ in range(width)] for _ in range(height)]
         self.objects: list[TUIObject] = []
         self.actions: list[TUIAction] = []
         self.background = None 
