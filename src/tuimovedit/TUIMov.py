@@ -26,7 +26,7 @@ class TUIMov:
                     next_frame += (f"\033[{skip_chars}C{c}" if skip_chars else c)
                     skip_chars = 0
                 self.last_canvas[y][x] = c
-            next_frame += "\n"
+            if y != len(self.canvas)-1: next_frame += "\n"
         self.add_string(next_frame)
         
 

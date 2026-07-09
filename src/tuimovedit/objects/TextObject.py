@@ -3,12 +3,13 @@ from ..utils import *
 
 class TextObject(MovableObject):
     def render(self, canvas: list[list[str]]):
-        for i, c in enumerate(self.text):
-            if self.y < 0: break
-            if self.y >= len(canvas): break
-            if self.x+i < 0: continue
-            if self.x+i >= len(canvas[0]): break
-            canvas[self.y][self.x+i] = c
+        for text_y, line in enumerate(self.text.split("\n")):
+            if self.y+text_y < 0: continue
+            if self.y+text_y >= len(canvas): break
+            for text_x, c in enumerate(line):
+                if self.x+text_x < 0: continue
+                if self.x+text_x >= len(canvas[0]): break
+                canvas[self.y+text_y][self.x+text_x] = c
 
     def write_tween(self, text, time: TUITime(), ease_func: callable = linear_ease):
         return TUITween(

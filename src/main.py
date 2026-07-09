@@ -6,7 +6,7 @@ def main():
 
     text1 = TextObject(0, 0, "Hiii")
     text2 = TextObject(60,10, "Hello, Text!")
-    text3 = TextObject(-5, 20, "im Stupid lol")
+    text3 = TextObject(-5, 20, "im Stupid lol\nor not? hehehehe")
     
     box1 = BoxObject(x=3, y=3, width=10, height=2)
     mov.add_object(box1)

@@ -2,6 +2,8 @@ from .tuitime import *
 
 BILLION = 1_000_000_000
 
+ZERO_TIME = TUITime()
+
 def time_to_bytes(time: TUITime) -> bytearray:
     return int_to_4_bytes(time.seconds) + int_to_4_bytes(time.nanoseconds)
 
